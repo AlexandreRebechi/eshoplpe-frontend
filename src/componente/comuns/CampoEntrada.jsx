@@ -1,19 +1,31 @@
-function CampoEntrada({ id, label, tipo, nome, value, handlechange, requerido, reaonly, texto }) {
+function CampoEntrada({id , label, tipo , name, value, handlechange,
+    requerido, readonly, textovalido, textoinvalido, maximocaracteres}) {
+
     return (
         <div className="form-group">
-        <label htmlFor="txtCodido" className="form-label">
-            Código
-        </label>
-        <input
-            type="text"
-            readOnly
-            className="form-control"
-            id="txtCodido"
-            name="codigo"
-            value={objeto.codigo}
-            onChange={handleChange}
-        />
-    </div>
-    
+            <label htmlFor={id} className="form-label">
+                {label}
+            </label>
+            <input
+                type={tipo}
+                className="form-control"
+                id={id}
+                name={name}
+                value={value}
+                onChange={handlechange}
+                required={requerido}
+                readOnly={readonly}
+                maxLength={maximocaracteres}
+            />
+            <div className="valid-feedback">
+                {textovalido}
+            </div>
+            <div className="invalid-feedback">
+                {textoinvalido}
+            </div>
+        </div>
     )
+
 }
+
+export default CampoEntrada;

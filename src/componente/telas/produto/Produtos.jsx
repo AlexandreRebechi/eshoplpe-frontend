@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
-import ProdutoContext from "./ProdutoContext";
-import { getCategoriaServico }
-    from '../../../servicos/CategoriaServico';
+import ProdutoContext from "./ProdutosContext";
 import {
     getProdutoServico, getProdutoServicoPorCodigoAPI,
     deleteProdutoServico, cadastraProdutoServico
-}
-    from '../../../servicos/ProdutoServico'
+}from '../../../servicos/ProdutoServico';
 import Tabela from "./Tabela";
 import Form from "./Form";
 import Carregando from "../../comuns/Carregando";
@@ -82,7 +79,7 @@ function Produto() {
     }
 
     const recuperaCategorias = async () => {
-        setListaCategorias(await getCategoriaServico());
+        setListaCategorias(await getProdutoServico());
     }
 
     const remover = async codigo => {
@@ -122,7 +119,7 @@ function Produto() {
                 <Tabela />
             </Carregando>
 
-            <Form />
+            <Form/>
         </ProdutoContext.Provider>
     )
 }

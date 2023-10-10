@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
 import CategoriaContext from './CategoriaContext';
 import {
-    getCategoriasAPI, getCategoriaPorCodigoAPI,
-    deleteCategoriaPorCodigoAPI, cadastraCategoriaAPI
+    getCategoriaServico, getCategoriaServicoPorCodigoAPI,
+    deleteCategoriaServico, cadastraCategoriaServico
 } from '../../../servicos/CategoriaServico';
 import Tabela from './Tabela';
 import Form from './Form';
 import WithAuth from '../../../seguranca/WithAuth';
+import { useNavigate } from 'react-router-dom/dist';
 
 function Categoria() {
+
+    let navigate = useNavigate(); 
 
     const [alerta, setAlerta] = useState({ status: "", message: "" });
     const [listaObjetos, setListaObjetos] = useState([]);
@@ -27,7 +30,7 @@ function Categoria() {
     }
 
     const editarObjeto = async codigo => {
-        setObjeto(await getCategoriaPorCodigoAPI(codigo))
+        setObjeto(await getCategoriaServicoPorCodigoAPI(codigo))
         setEditar(true);
         setAlerta({ status: "", message: "" });
     }
@@ -36,25 +39,38 @@ function Categoria() {
         e.preventDefault();
         const metodo = editar ? "PUT" : "POST";
         try {
-            let retornoAPI = await cadastraCategoriaAPI(objeto, metodo);
-            setAlerta({ status: retornoAPI.status, message: retornoAPI.message });
+            let retornoAPI = await cadastraCategoriaServico(objeto, metodo);
+            setAlerta({ 
+                status: retornoAPI.status, 
+                message: retornoAPI.message });
             setObjeto(retornoAPI.objeto);
             if (!editar) {
                 setEditar(true);
             }
         } catch (err) {
-            console.error(err.message);
+            window.location.reload();
+            navigate("/login", { replace: true });
         }
         recuperaCategorias();
     }
+
     const recuperaCategorias = async () => {
-        setListaObjetos(await getCategoriasAPI());
+        try {
+            setCarregando(true);
+            setListaObjetos(await getCategoriaServico());
+            setCarregando(false);
+
+        } catch (err) {
+            window.location.reload();
+            navigate("/login", { replace: true });
+        }
+
     }
 
     const remover = async codigo => {
         try {
             if (window.confirm('Deseja remover este objeto?')) {
-                let retornoAPI = await deleteCategoriaPorCodigoAPI(codigo);
+                let retornoAPI = await deleteCategoriaServico(codigo);
                 setAlerta({ 
                     status: retornoAPI.status, 
                     message: retornoAPI.message })

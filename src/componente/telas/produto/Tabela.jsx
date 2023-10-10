@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import ProdutoContext from "./ProdutoContext";
+import ProdutoContext from "./ProdutosContext";
 import Alerta from '../../comuns/Alerta';
 import { formataMoeda } from "../../comuns/Uteis";
 

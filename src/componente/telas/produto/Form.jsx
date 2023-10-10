@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import Alerta from '../../comuns/Alerta';
-import ProdutoContext from './ProdutoContext';
+import ProdutoContext from './ProdutosContext';
 import CampoEntrada from '../../comuns/CampoEntrada';
 import Dialogo from '../../comuns/Dialogo';
 import CampoSelect from '../../comuns/CampoSelect';
@@ -72,3 +72,4 @@ function Form() {
         </Dialogo>
     )
 }
+export default Form; 
