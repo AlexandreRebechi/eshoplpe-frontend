@@ -6,6 +6,7 @@ import {
 } from '../../../servicos/CategoriaServico';
 import Tabela from './Tabela';
 import Form from './Form';
+import WithAuth from '../../../seguranca/WithAuth';
 
 function Categoria() {
 
@@ -13,7 +14,7 @@ function Categoria() {
     const [listaObjetos, setListaObjetos] = useState([]);
     const [editar, setEditar] = useState(false);
     const [objeto, setObjeto] = useState({
-        codigo: "", nome: "", descricao: "", sigla: ""
+        codigo: "", nome: ""
     })
     const [carregando, setCarregando] = useState(true);
     const novoObjeto = () => {
@@ -46,6 +47,26 @@ function Categoria() {
         }
         recuperaCategorias();
     }
+    const recuperaCategorias = async () => {
+        setListaObjetos(await getCategoriasAPI());
+    }
+
+    const remover = async codigo => {
+        try {
+            if (window.confirm('Deseja remover este objeto?')) {
+                let retornoAPI = await deleteCategoriaPorCodigoAPI(codigo);
+                setAlerta({ 
+                    status: retornoAPI.status, 
+                    message: retornoAPI.message })
+                recuperaCategorias();
+            }
+        } catch (error) {
+            window.location.reload();
+            navigate("/login", { replace: true });
+
+        }
+    }
+   
 
     const handleChange = (e) => {
         const name = e.target.name;
@@ -53,18 +74,7 @@ function Categoria() {
         setObjeto({ ...objeto, [name]: value });
     }
 
-    const recuperaCategorias = async () => {
-        setListaObjetos(await getCategoriasAPI());
-    }
-
-    const remover = async codigo => {
-        if (window.confirm('Deseja remover este objeto?')) {
-            let retornoAPI = await deleteCategoriaPorCodigoAPI(codigo);
-            setAlerta({ status: retornoAPI.status, message: retornoAPI.message })
-            recuperaCategorias();
-        }
-    }
-
+    
     useEffect(() => {
         recuperaCategorias();
     }, []);
@@ -89,4 +99,4 @@ function Categoria() {
     );
 }
 
-export default Categoria;
+export default WithAuth(Categoria);
